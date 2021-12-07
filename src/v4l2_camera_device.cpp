@@ -184,6 +184,10 @@ std::string V4l2CameraDevice::getCameraName()
   auto name = std::string{reinterpret_cast<char *>(capabilities_.card)};
   std::transform(name.begin(), name.end(), name.begin(), ::tolower);
   std::replace(name.begin(), name.end(), ' ', '_');
+  RCLCPP_INFO(
+    rclcpp::get_logger("v4l2_camera"),
+    "Camera Name: %s", name.c_str()
+  ) ;
   return name;
 }
 
@@ -221,6 +225,10 @@ Image::UniquePtr V4l2CameraDevice::capture()
     img->encoding = sensor_msgs::image_encodings::YUV422;
   } else if (cur_data_format_.pixelFormat == V4L2_PIX_FMT_GREY) {
     img->encoding = sensor_msgs::image_encodings::MONO8;
+  } else if (cur_data_format_.pixelFormat == V4L2_PIX_FMT_MJPEG) {
+    img->encoding = "mjpeg" ;
+  } else if (cur_data_format_.pixelFormat == V4L2_PIX_FMT_H264) {
+    img->encoding = "h264" ;
   } else {
     RCLCPP_WARN(rclcpp::get_logger("v4l2_camera"), "Current pixel format is not supported yet");
   }

@@ -79,9 +79,9 @@ V4L2Camera::V4L2Camera(rclcpp::NodeOptions const & options)
         }
 
         auto stamp = now();
-        if (img->encoding != output_encoding_) {
-          img = convert(*img);
-        }
+        // if (img->encoding != output_encoding_) {
+          // img = convert(*img);
+        // }
         img->header.stamp = stamp;
         img->header.frame_id = camera_frame_id_;
 
@@ -233,9 +233,20 @@ void V4L2Camera::createParameters()
           range.from_value = c.minimum;
           range.to_value = c.maximum;
           descriptor.integer_range.push_back(range);
-          auto value = declare_parameter<int64_t>(name, current_value, descriptor);
-          camera_->setControlValue(c.id, value);
-          break;
+          try {
+            auto value = declare_parameter<int64_t>(name, current_value, descriptor);
+            camera_->setControlValue(c.id, value);
+            break;
+          }
+          catch(rclcpp::exceptions::InvalidParameterValueException & ex) {
+            RCLCPP_ERROR(
+              get_logger(),
+              "Failed to declare parameter %s, due to %s",
+              name.c_str(),
+              ex.what()
+            ) ;
+            break ;
+          }
         }
       case ControlType::BOOL:
         {
