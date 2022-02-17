@@ -79,9 +79,9 @@ V4L2Camera::V4L2Camera(rclcpp::NodeOptions const & options)
         }
 
         auto stamp = now();
-        // if (img->encoding != output_encoding_) {
-          // img = convert(*img);
-        // }
+        if (img->encoding != output_encoding_) {
+          img = convert(*img);
+        }
         img->header.stamp = stamp;
         img->header.frame_id = camera_frame_id_;
 
