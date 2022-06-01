@@ -30,6 +30,9 @@
 
 #include "v4l2_camera/visibility_control.h"
 
+#include <opencv2/imgproc.hpp>
+#include <opencv2/highgui/highgui.hpp>
+
 namespace v4l2_camera
 {
 
@@ -37,10 +40,13 @@ class V4L2Camera : public rclcpp::Node
 {
 public:
   explicit V4L2Camera(rclcpp::NodeOptions const & options);
-
   virtual ~V4L2Camera();
 
 private:
+  rclcpp::TimerBase::SharedPtr timer_ ;
+  cv::Mat frame ;
+  cv::Mat flipped_frame ;
+  cv::VideoCapture cap ;
   std::shared_ptr<V4l2CameraDevice> camera_;
 
   // Publisher used for intra process comm
