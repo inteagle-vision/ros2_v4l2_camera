@@ -30,8 +30,8 @@
 
 #include "v4l2_camera/visibility_control.h"
 
-#include <opencv2/imgproc.hpp>
-#include <opencv2/highgui/highgui.hpp>
+#include <opencv4/opencv2/imgproc.hpp>
+#include <opencv4/opencv2/highgui/highgui.hpp>
 
 namespace v4l2_camera
 {

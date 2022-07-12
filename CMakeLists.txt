@@ -22,6 +22,8 @@ find_package(rclcpp REQUIRED)
 find_package(rclcpp_components REQUIRED)
 find_package(image_transport REQUIRED)
 find_package(camera_info_manager REQUIRED)
+find_package(OpenCV REQUIRED COMPONENTS core highgui imgcodecs imgproc videoio)
+find_package(cv_bridge REQUIRED)
 
 add_library(v4l2_camera
   src/v4l2_camera.cpp
@@ -32,11 +34,13 @@ target_include_directories(v4l2_camera PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
 
+include_directories(${OpenCV_INCLUDE_DIRS})
 ament_target_dependencies(v4l2_camera
   "rclcpp"
   "rclcpp_components"
   "image_transport"
-  "camera_info_manager")
+  "camera_info_manager"
+  "cv_bridge")
 
 target_compile_options(v4l2_camera PRIVATE -Werror)
 
